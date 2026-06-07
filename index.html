@@ -1898,7 +1898,7 @@ async function sendChat(type){
   const sys=isEdu?'You are EduPal, an AI study assistant in VORTYX. Help with study strategies, subject questions, exam prep, productivity. Be concise and practical. Max 180 words.':'You are FitPal, an AI fitness coach in VORTYX. Help with workouts, form, progressive overload, home workouts, nutrition. Be concise and motivating. Max 180 words.';
   const msgs=isEdu?S.eduMsgs:S.fitMsgs;msgs.push({role:'user',content:text});
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:msgs.slice(-10)})});
+    const res=await fetch('/.netlify/functions/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:msgs.slice(-10)})});
     if(!res.ok)throw new Error('API '+res.status);
     const data=await res.json();const reply=data.content?.map(c=>c.text||'').join('')||'Sorry, try again.';
     msgs.push({role:'assistant',content:reply});if(msgs.length>20)msgs.splice(0,2);
